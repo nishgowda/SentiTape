@@ -5,9 +5,9 @@ import spotipy.util as util
 import random
 
 
-client_id = "2e24f089043f4ca99454eacc470d9ec8"
-client_secret = "3b266e93c2f8433fb22ce651c8161ca6"
-redirect_uri = "http://localhost:3000/"
+client_id = "blank"
+client_secret = "blank"
+redirect_uri = "blank"
 
 scope = 'user-library-read user-top-read playlist-modify-public user-follow-read'
 
