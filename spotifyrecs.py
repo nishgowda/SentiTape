@@ -4,6 +4,7 @@ import requests
 import json
 import re
 import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 
 # SETTINGS
@@ -11,7 +12,8 @@ import spotipy.util as util
 client_id = "ENTER YOUR CLIENT ID"
 client_secret = "ENTER YOUR CLIENT SECRET"
 redirect_uri = "ENTER YOUR REDIRECT URI"
-
+client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 scope = 'user-library-read user-top-read playlist-modify-public user-follow-read'
 endpoint_url = "https://api.spotify.com/v1/recommendations?"
 
@@ -58,10 +60,14 @@ if token:
     energy_level = float(input("How energetic do you want the music to be? (0.0-1.0)  "))
     popularity = int(input("How popular should the music be? (0-100)  "))
      
-    artist_token = input('Enter the artist token of a song:  ')
-    seed_artists = re.sub("spotify:artist:", "", str(artist_token))
-    track_token = input('Enter the track token of a song:  ')
-    seed_tracks = re.sub("spotify:track:", "", str(track_token))
+    artist_token = input('Enter the name of an artist:  ')
+    artist_result = sp.search(artist_token)
+    artist_uri = artist_result['tracks']['items'][0]['artists'][0]['uri']
+    seed_artists = re.sub("spotify:artist:", "", str(artist_uri))
+    track_token = input('Enter the name  of a song:  ')
+    track_result = sp.search(track_token)
+    track_uri = track_result['tracks']['items'][0]['artists'][0]['uri']
+    seed_tracks = re.sub("spotify:artist:", "", str(track_uri))
   # PERFORM THE QUERY
     query = f'{endpoint_url}limit={limit}&market={market}&seed_genres={seed_genres}&target_danceability={target_danceability}&energy_level={energy_level}&popularity={popularity}'
     query += f'&seed_artists={seed_artists}'
