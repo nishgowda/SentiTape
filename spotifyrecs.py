@@ -8,9 +8,9 @@ import spotipy.util as util
 
 # SETTINGS
 
-client_id = "2e24f089043f4ca99454eacc470d9ec8"
-client_secret = "3b266e93c2f8433fb22ce651c8161ca6"
-redirect_uri = "http://localhost:3000/"
+client_id = "ENTER YOUR CLIENT ID"
+client_secret = "ENTER YOUR CLIENT SECRET"
+redirect_uri = "ENTER YOUR REDIRECT URI"
 
 scope = 'user-library-read user-top-read playlist-modify-public user-follow-read'
 endpoint_url = "https://api.spotify.com/v1/recommendations?"
