@@ -69,27 +69,24 @@ if token:
 			energy = 0.3
 		else:
 			print("That wasn't a choice")
-    # Step 2. Creating a list of your favorite artists
-
+   #GETS A LIST OF THE USERS TOP ARTISTS
 	def aggregate_top_artists(sp):
-		print('...getting your top artists')
-		top_artists_name = []
-		top_artists_uri = []
+	    print('...getting your top artists')
+	    top_artists_name = []
+	    top_artists_uri = []
+	    ranges = ['short_term', 'medium_term', 'long_term']
+	    for r in ranges:
+		top_artists_all_data = sp.current_user_top_artists(limit=10, time_range=r)
+		top_artists_data = top_artists_all_data['items']
+		for artist_data in top_artists_data:
+		    if (artist_data["name"] not in top_artists_name):
+			top_artists_name.append(artist_data['name'])
+			top_artists_uri.append(artist_data['uri'])
+			top_genres.append(artist_data["genres"])
+	    random.shuffle(top_artists_uri)
+	    return top_artists_uri
 
-		ranges = ['short_term', 'medium_term', 'long_term']
-		for r in ranges:
-			top_artists_all_data = sp.current_user_top_artists(limit=10, time_range=r)
-			top_artists_data = top_artists_all_data['items']
-			for artist_data in top_artists_data:
-				if (artist_data["name"] not in top_artists_name):
-					top_artists_name.append(artist_data['name'])
-					top_artists_uri.append(artist_data['uri'])
-		random.shuffle(top_artists_uri)
-
-		return top_artists_uri
-
-    # Step 3. For each of the artists, get a set of tracks for each artist
-
+	#GETS A LIST OF THE TOP TRACKS FROM THE USERS TOP ARTISTS
 	def aggregate_top_tracks(sp, top_artists_uri):
 		print("...getting top tracks")
 		top_tracks_uri = []
@@ -98,62 +95,56 @@ if token:
 			top_tracks_data = top_tracks_all_data['tracks']
 			for track_data in top_tracks_data:
 				top_tracks_uri.append(track_data['uri'])
-
+		random.shuffle(top_tracks_uri)
 		return top_tracks_uri
 
-	# Step 4. From top tracks, select tracks that are within a certain mood range
-	def recommend_tracks(sp, top_artists_uri,top_tracks_uri):
-		print("...recommending songs")
-		lim = int(100/4)
-		uris = []
-		print(sp.recommendation_genre_seeds())
-		query = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_tracks=top_tracks_uri[:1], limit = lim, target_danceability=danceability, target_valence = valence, target_tempo=tempo, target_energy=energy))
-		query1 = (sp.recommendations(seed_artists=top_artists_uri[1:2], seed_tracks=top_tracks_uri[1:2], limit = lim, target_danceability=danceability, target_valence = valence, target_tempo=tempo, target_energy=energy))
-		query2 = (sp.recommendations(seed_artists=top_artists_uri[2:3], seed_tracks=top_tracks_uri[2:3], limit = lim, target_danceability=danceability, target_valence = valence, target_tempo=tempo, target_energy=energy))
-		query3 = (sp.recommendations(seed_artists=top_artists_uri[3:4], seed_tracks=top_tracks_uri[3:4], limit = lim, target_danceability=danceability, target_valence = valence, target_tempo=tempo, target_energy=energy))		
-		for i, j in enumerate(query['tracks']):
-			uris.append(j['uri'])
-			print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
-				
-		for i, j in enumerate(query1['tracks']):
-			uris.append(j['uri'])
-			print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
-		for i, j in enumerate(query2['tracks']):
-			uris.append(j['uri'])
-			print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
-		for i, j in enumerate(query3['tracks']):
-			uris.append(j['uri'])
-			print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
-	
-		return uris		
+	#ITERATES THROUGH THE TOP GENRES OF THE USRE"S TOP ARTISTS
+	def get_one_genre():
+	    selected_genre = []
+	    for genres in top_genres:
+		for single in genres:
+		    selected_genre.append(single)
+	    print(selected_genre)
+	    return selected_genre
 
-	# Step 5. From these tracks, create a playlist for user
 
-	def create_playlist(sp, selected_tracks_uri, limit, choice, playlist_title, playlist_description):
+	#CREATES A LIST OF RECOMMENDED TRACKS BASED ON THE USERS TOP ARTISTS, TOP SONGS, AND TOP GENRES
+	def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre):
+	    print('...recommending songs')
+	    lim = int(math.ceil(limit/2))
+	    uris = []
+	    selected_tracks = []
+	    min_genre_bounds = random.randint(0,len(selected_genre))
+	    min1_genre_bounds = random.randint(min_genre_bounds,len(selected_genre))
+	    print("Your first genre is :"+ str(selected_genre[min_genre_bounds:min_genre_bounds+1]))
+	    print("Your second genre is :"+ str(selected_genre[min1_genre_bounds:min1_genre_bounds+1]))
+	    query = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_genres=selected_genre[min_genre_bounds:1+min_genre_bounds],seed_tracks=top_tracks_uri[:1],
+			 limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
+	    query2 = (sp.recommendations(seed_artists=top_artists_uri[1:2], seed_genres=selected_genre[min1_genre_bounds:min1_genre_bounds+1],  seed_tracks=top_tracks_uri[1:2],
+			 limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
+	    for i, j in enumerate(query['tracks']):
+		uris.append(j['uri'])
+		print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
+	    for i, j in enumerate(query2['tracks']):
+		uris.append(j['uri'])
+		print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
 
-		print("...creating playlist")
-		user_all_data = sp.current_user()
-		user_id = user_all_data["id"]
+	    uris = list(set(uris))
+	    return uris
+	#FINALLY CREATES THE PLAYLIST AND ADDS THE RECOMMENDED SONGS FROM RECOMMEND_TRACKS
+	def create_playlist(sp, selected_tracks_uri, limit, playlist_title, playlist_description):
+	    print('...creating playlist')
+	    user_all_data = sp.current_user()
+	    user_id = user_all_data["id"]
 
-		playlist_all_data = sp.user_playlist_create(user_id, playlist_title, description=playlist_description)
-		playlist_id = playlist_all_data["id"]
+	    playlist_all_data = sp.user_playlist_create(user_id, playlist_title, description=playlist_description)
+	    playlist_id = playlist_all_data["id"]
+	    playlist_uri = playlist_all_data["uri"]
 
-		random.shuffle(selected_tracks_uri)
-		sp.user_playlist_add_tracks(user_id, playlist_id, selected_tracks_uri[0:limit])
+	    random.shuffle(selected_tracks_uri)
+	    sp.user_playlist_add_tracks(user_id, playlist_id, selected_tracks_uri[0:limit])
+	    return playlist_uri
 
-	print("What is your vibe? ")
-	choice = input('')
-	limit  = int(input('How many songs do you want? '))
-	playlist_title = input("Playlist title: ")
-	playlist_description = input("playlist description: ")
-	type_of_playlist(choice)
-	spotify_auth = authenticate_spotify()
-	top_artists = aggregate_top_artists(spotify_auth)
-	top_tracks = aggregate_top_tracks(spotify_auth, top_artists)
-	recommends = recommend_tracks(spotify_auth, top_artists, top_tracks)
-	##selected_tracks=select_tracks(spotify_auth, recommends)
-	#selected_tracks = select_tracks(spotify_auth, recommends)
-	create_playlist(spotify_auth, recommends,limit,choice, playlist_title, playlist_description)
 
 
 
