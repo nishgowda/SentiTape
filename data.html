@@ -1,0 +1,131 @@
+<!DOCTYPE html5>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vibetape</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="static/fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="static/vendor/nouislider/nouislider.min.css">
+    
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="static/css/odometer.css" />
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+    
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link " href="index">Home </a>
+        <a class="nav-item nav-link active" href="data">Data<span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="#">Contact</a>
+      </div>
+    </div>
+  </nav>
+<body>
+    <div class="main">
+
+       
+        <div class="container">
+          <h1>Your Most Played</h1> 
+            
+
+           <div class="table-responsive"></div>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Artists</th>
+                    <th scope="col">Songs</th>
+                    <th scope="col">Genres</th>
+                  </tr>
+                </thead>
+                <tbody>
+                   
+                <tr>
+                    {% for artists in top_artists %}
+                    {% set item_1 = top_artists[loop.index-1] %}
+                    {% set item_2 = songs[loop.index-1] %}
+                    {% set item_3 = genres[loop.index-1] %}
+                    <th scope="row">{{loop.index}}</th>
+                    <td>{{item_1}}</td>
+                    <td>{{item_2}}</td>
+                    <td>{{item_3}}</td>
+                        
+                </tr>
+                {% endfor %}
+                <tr>
+                    {% for track in songs %}
+                    {{item}} {{loop.counter}}
+                    
+                    
+                </tr>
+                {% endfor %}
+                
+
+
+                
+                </tbody>
+              </table>
+              </div>
+              </div>
+              </div>
+              <footer class="footer-distributed">
+ 
+                <div class="footer-left">
+        
+                   
+                </div>
+        
+                <div class="footer-center">
+                    <center><h3>Stay Connected</h3>
+                    <p class="footer-company-about">
+                      
+                    </p>
+                    <div class="footer-icons">
+                        <a href="https://github.com/nishgowda/Vibetape"  class="fa fa-github"></a>
+                        <a  href="https://nishgowda.github.io/develop/" class="fa fa-user"></a>
+                        <a  href="https://open.spotify.com/user/nishman606?si=JYZdajfpRmq3reCVxOmssA" class="fa fa-spotify"></a>
+                       <a  href="https://github.com/nishgowda" class="fa fa-envelope"></a>
+                    </div>
+                    <p class="footer-company-about">
+                    
+                      <span>&copy 2020 Nish Gowda</span>
+                    </p>
+                            </center>
+                </div> 
+             
+               
+           
+              </body>
+            </footer>
+        
+            <!-- JS -->
+            <script src="static/js/odometer.js"></script>
+            <script src="static/vendor/jquery/jquery.min.js"></script>
+            <script src="static/vendor/nouislider/nouislider.min.js"></script>
+            <script src="static/vendor/wnumb/wNumb.js"></script>
+            <script src="static/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+            <script src="static/vendor/jquery-validation/dist/additional-methods.min.js"></script>
+          
+            <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="/__/firebase/7.14.0/firebase-app.js"></script>
+        
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+             https://firebase.google.com/docs/web/setup#available-libraries -->
+        <script src="/__/firebase/7.14.0/firebase-analytics.js"></script>
+        
+        <!-- Initialize Firebase -->
+        <script src="/__/firebase/init.js"></script>
+              </html>
+
+
