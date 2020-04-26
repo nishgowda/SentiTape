@@ -93,17 +93,41 @@ def saved_albums(sp):
             count += len(albums[x])
     return count
 
-def followed_artists(sp):
+def followed_artists(sp, range, limit):
     top_artists_name = []
-    ranges = ['short_term', 'medium_term', 'long_term']
+    if range == 'Short Term':
+        newRange = 'short_term'
+    elif range == 'Medium Term':
+        newRange = 'medium_term'
+    elif range == 'Long Term':
+        newRange = 'long_term'
+    ranges = [newRange]
     for r in ranges:
-        top_artists_all_data = sp.current_user_top_artists(limit=10, time_range=r)
+        top_artists_all_data = sp.current_user_top_artists(limit=limit, time_range=r)
         top_artists_data = top_artists_all_data['items']
         for artist_data in top_artists_data:
             if (artist_data["name"] not in top_artists_name):
                 top_artists_name.append(artist_data['name'])
+                top_genres.append(artist_data["genres"])
     return (top_artists_name)
-    
+
+def most_played_songs(sp, range, limit):
+    top_track_name = []
+    if range == 'Short Term':
+        newRange = 'short_term'
+    elif range == 'Medium Term':
+        newRange = 'medium_term'
+    elif range == 'Long Term':
+        newRange = 'long_term'
+    ranges = [newRange]
+    for r in ranges:
+        top_track_all_data = sp.current_user_top_tracks(limit=limit, time_range=r)
+        top_track_data = top_track_all_data['items']
+        for track_data in top_track_data:
+            if track_data["name"] not in top_track_name:
+                top_track_name.append(track_data['name'])
+    return top_track_name
+
 #GETS A LIST OF THE TOP TRACKS FROM THE USERS TOP ARTISTS
 def aggregate_top_tracks(sp, top_artists_uri):
 	print("...getting top tracks")
@@ -115,6 +139,7 @@ def aggregate_top_tracks(sp, top_artists_uri):
 			top_tracks_uri.append(track_data['uri'])
 	random.shuffle(top_tracks_uri)
 	return top_tracks_uri
+
 def following(sp):
     top_artists_name = []
     followed_artists_all_data = sp.current_user_followed_artists(limit=50)
@@ -129,7 +154,6 @@ def get_one_genre():
     for genres in top_genres:
         for single in genres:
             selected_genre.append(single)
-    print(selected_genre)
     return selected_genre
 
 
@@ -148,7 +172,7 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
 	         limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
     query2 = (sp.recommendations(seed_artists=top_artists_uri[1:2], seed_genres=selected_genre[min1_genre_bounds:min1_genre_bounds+1],  seed_tracks=top_tracks_uri[1:2],
 	         limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
-    
+
     for i, j in enumerate(query['tracks']):
         uris.append(j['uri'])
         print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
@@ -163,7 +187,7 @@ def create_playlist(sp, selected_tracks_uri, limit, playlist_title, playlist_des
     print('...creating playlist')
     user_all_data = sp.current_user()
     user_id = user_all_data["id"]
-    
+
     playlist_all_data = sp.user_playlist_create(user_id, playlist_title, description=playlist_description)
     playlist_id = playlist_all_data["id"]
     playlist_uri = playlist_all_data["uri"]
@@ -171,5 +195,3 @@ def create_playlist(sp, selected_tracks_uri, limit, playlist_title, playlist_des
     random.shuffle(selected_tracks_uri)
     sp.user_playlist_add_tracks(user_id, playlist_id, selected_tracks_uri[0:limit])
     return playlist_uri
-
-
