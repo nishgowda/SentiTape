@@ -1,6 +1,6 @@
 # Vibetape
 
-## What is it?
+### What is it?
 
 Have you ever had a good idea for the perfect playlist but are just too lazy to make one? Vibetape is the perfect combination of program automation and user control as it gives users the abilitiy to customize the atrributes of their playlists while saving them the time of sitting down and ardiously adding songs to a playlist
 
