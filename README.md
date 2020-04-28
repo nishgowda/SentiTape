@@ -4,19 +4,19 @@ Have you ever had a good idea for the perfect playlist but are just too lazy to 
 
 Vibetape propmpts the user to choose from an array of moods that they might be feeling at a given moment and then will traverse through the users most played artist and his or her most played songs and uses that data along with the users "vibe" to generate a list of recommendations. The algorithm then creates a playlists titled whatever the user desires (along with a description) and then adds the recommended songs to that playlist.
 
-Authentication/Security:
-  Flask Login
-  Spotify Oauth Tokens: CLIENT ID, CLIENT SECRET, REDERICT URI
+**Authentication/Security:**
+  - Flask Login
+  - Spotify Oauth Tokens: CLIENT ID, CLIENT SECRET, REDERICT URI
 
-Back End:
-  Python
-  Flask Server
+**Back End:**
+  - Python
+  - Flask Server
 
-Front End:
-  Jinja2
-  HTMl5
-  CSS3
-  Javascript
+**Front End:**
+  - Jinja2
+  - HTMl5
+  - CSS3
+  - Javascript
   
 
 Powered by the Spotify Web Api: https://developer.spotify.com/
