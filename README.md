@@ -6,7 +6,7 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
 
 **Authentication/Security:**
   - Flask Login
-  - Spotify Oauth Tokens: CLIENT ID, CLIENT SECRET, REDERICT URI
+  - Spotify Oauth Tokens: CLIENT ID, CLIENT SECRET, REDERICT URI (Learn about this at: https://developer.spotify.com/)
 
 **Back End:**
   - Python
@@ -21,7 +21,7 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
 **TO DO:**
   - [ ] Reconfigure index.html, Table View etc.
   - [ ] Get server hosted (Heroku, Google App Engine)
-  - [X] Decide if database is needed
+  - [X] Decide if database is needed (it's not -- Spotify secures user data; merely retrieving data)
   - [ ] \(Optional) decide if sentiment analysis should replace vibe selection
 
-Powered by the Spotify Web Api: https://developer.spotify.com/
+
