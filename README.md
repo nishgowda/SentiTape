@@ -2,6 +2,21 @@
 
 Have you ever had a good idea for the perfect playlist but are just too lazy to make one? Vibetape is the perfect combination of program automation and user control as it gives users the abilitiy to customize the atrributes of their playlists while saving them the time of sitting down and ardiously adding songs to a playlist
 
-Some of the atrributes the user can control are the number of songs you want, the genre of songs, the danceability, the energy, and the popularity of the songs. To achieve maximum accuracy, VibeTapes also prompts the user to give an example Artist and Song to base it's reccomendations off of. 
+Vibetape propmpts the user to choose from an array of moods that they might be feeling at a given moment and then will traverse through the users most played artist and his or her most played songs and uses that data along with the users "vibe" to generate a list of recommendations. The algorithm then creates a playlists titled whatever the user desires (along with a description) and then adds the recommended songs to that playlist.
 
-Powered by the Spotify Web Api.
+Authentication/Security:
+  Flask Login
+  Spotify Oauth Tokens: CLIENT ID, CLIENT SECRET, REDERICT URI
+
+Back End:
+  Python
+  Flask Server
+
+Front End:
+  Jinja2
+  HTMl5
+  CSS3
+  Javascript
+  
+
+Powered by the Spotify Web Api: https://developer.spotify.com/
