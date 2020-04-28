@@ -18,5 +18,9 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
   - CSS3
   - Javascript
   
+**TO DO:**
+  -[] Reconfigure index.html, Table View etc.
+  -[] Get server hosted (Heroku, Google App Engine)
+  -[] Decide if database is needed
 
 Powered by the Spotify Web Api: https://developer.spotify.com/
