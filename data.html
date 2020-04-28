@@ -22,6 +22,7 @@
     </style>
 </head>
 <nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <a class="navbar-brand" href="index">Vibetape</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -43,7 +44,6 @@
           <div class="select-stack">
             <label for="time">Range:</label>
             <select class="form-control" name="time" id="time">
-            <option value="Short Term" selected  hidden>{{default}}</option>
               <option value="Short Term" >Short Term</option>
               <option  value="Medium Term">Medium Term</option>
               <option  value="Long Term">Long Term</option>
@@ -52,11 +52,11 @@
           <div class="select-stack">
             <label for="limit">Limit:</label>
             <select class="form-control" name="limit" id="limit">
-                <option>Limit</option>
+                <option value=10>10</option>
             </select>
             <script>
                 var select = document.getElementById("limit");
-                for(var i = 20; i <= 50; i++) {
+                for(var i = 11; i <= 50; i++) {
                     var opt = i;
                     var el = document.createElement("option");
                     el.textContent = opt;
