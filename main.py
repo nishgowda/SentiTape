@@ -99,7 +99,7 @@ def user_data():
         size = len(artists)
         genres = get_one_genre()
         default = time
-        return render_template("data.html",size=range(1, 11), top_artists=artists, songs=songs, genres=genres, default=default)
+        return render_template("data.html", top_artists=artists, songs=songs, genres=genres, default=default)
     else:
         return redirect("/")
 
