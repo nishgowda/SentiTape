@@ -15,7 +15,8 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
 - Once requirments/dependicies are installed, simply run: python3 main.py in terminal
 - Visit local host on webrowser and voila!
 
-###Tech Stack Used:
+### Tech Stack Used:
+
 **Authentication/Security:**
   - Flask Login
   - Spotify Oauth Tokens: CLIENT ID, CLIENT SECRET, REDERICT URI (Learn about this at: https://developer.spotify.com/)
