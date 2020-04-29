@@ -13,9 +13,9 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
 
 **How to run:**
 - Once requirments/dependicies are installed, simply run: ***python3 main.py*** in terminal
-- Visit localhost:5000 on webrowser and voila!
+- Visit ***localhost:5000*** on webrowser and voila!
 
-### Tech Stack Used:
+### The Tech Stack:
 
 **Authentication/Security:**
   - Flask Login
@@ -23,18 +23,18 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
 
 **Back End:**
   - Python
-  - Flask Server
+  - Flask Microservice
 
 **Front End:**
-  - Jinja2
+  - Jinja2 (Used with Flask)
   - HTML5
   - CSS3
   - Javascript
   
 **TO DO:**
   - [ ] Reconfigure index.html, Table View etc.
-  - [ ] Get server hosted (Heroku, Google App Engine)
-  - [X] Decide if database is needed (it's not -- Spotify secures user data; merely retrieving data)
-  - [ ] \(Optional) decide if sentiment analysis should replace vibe selection
+  - [ ] Get server hosted (Heroku, Google App Engine, AWS)
+  - [X] Decide if database is needed (it's not -- Spotify secures user data; merely retrieving it)
+  - [ ] \(Optional) Decide if sentiment analysis should replace vibe selection
 
 
