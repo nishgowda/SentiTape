@@ -27,7 +27,7 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
 
 **Front End:**
   - Jinja2
-  - HTMl5
+  - HTML5
   - CSS3
   - Javascript
   
