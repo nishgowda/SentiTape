@@ -22,16 +22,35 @@
         h7 {display:inline;}
     </style>
 </head>
-
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <a class="navbar-brand" href="index">Vibetape</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="index">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="data">Data</a>
+        <a class="nav-item nav-link" href="#">Contact</a>
+      </div>
+    </div>
+  </nav>
 <body>
+   
 
     <div class="main">
+
+       
         <div class="container">
             
             <div class="signup-content">
                
-               
-                    <center><h1>Welcome to Vibetape {{user_id}}</h1>
+
+                    <center>
+                       
+                        <h1>Welcome {{user_id}}</h1>
+                        <hr size="20">
+         
                         <script src="static/js/odometer.js"></script>
                         <div>
                         <h5 class="playlist-odometer">0</h5>
@@ -152,12 +171,11 @@
                                     </div>
 
                         </div>
-
                         <div class="form-submit">
                             <input type="submit" value="Submit" class="submit" id="submit" name="submit" />
-
                         </div>
                     </form>
+
                    
                 </center>
                 
@@ -169,28 +187,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer-distributed">
- 
-        <div class="footer-left">
-
-           
-        </div>
-
-        <div class="footer-center">
-            <center><h3>What is Vibetape?</h3>
-            <p class="footer-company-about">
-                Have you ever had a good idea for the perfect playlist but are just too lazy to make one? Vibetape fixes this for you. Vibetape is the perfect combination of program automation and user control as it gives users the abilitiy to customize the atrributes of their playlists while saving them the time of sitting down and ardiously adding songs to a playlist
-                    </p>
-                        <div class="footer-icons">
-                            <i href="https://github.com/nishgowda" class="fa fa-github"></i>
-                           <i href="https://nishgowda.github.io/develop/" class="fa fa-twitter"></i>
-                        </div>
-                    </center>
-        </div>  
-        <div class="footer-right">
-           
-        </div>
-    </footer>
+   
 
     <!-- JS -->
     <script src="static/js/odometer.js"></script>
@@ -199,7 +196,7 @@
     <script src="static/vendor/wnumb/wNumb.js"></script>
     <script src="static/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="static/vendor/jquery-validation/dist/additional-methods.min.js"></script>
-    <script src="static/js/main.js"></script>
+  
     <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="/__/firebase/7.14.0/firebase-app.js"></script>
 
@@ -210,4 +207,5 @@
 <!-- Initialize Firebase -->
 <script src="/__/firebase/init.js"></script>
 </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
 </html>

@@ -12,6 +12,8 @@ tempo = 0.0
 valence = 0.0
 energy = 0.0
 top_genres = []
+recs1 = []
+recs2 = []
 
 def type_of_playlist(choice):
     global danceability
@@ -113,6 +115,7 @@ def followed_artists(sp, range, limit):
 
 def most_played_songs(sp, range, limit):
     top_track_name = []
+    top_track_artist = []
     if range == 'Short Term':
         newRange = 'short_term'
     elif range == 'Medium Term':
@@ -120,12 +123,17 @@ def most_played_songs(sp, range, limit):
     elif range == 'Long Term':
         newRange = 'long_term'
     ranges = [newRange]
+    
     for r in ranges:
         top_track_all_data = sp.current_user_top_tracks(limit=limit, time_range=r)
         top_track_data = top_track_all_data['items']
         for track_data in top_track_data:
             if track_data["name"] not in top_track_name:
-                top_track_name.append(track_data['name'])
+                strang = ""
+                strang+=str(track_data['name'])
+                strang+=str(" by ")
+                strang+=str(track_data['artists'][0]['name'])
+                top_track_name.append(strang)
     return top_track_name
 
 #GETS A LIST OF THE TOP TRACKS FROM THE USERS TOP ARTISTS
@@ -156,13 +164,16 @@ def get_one_genre():
             selected_genre.append(single)
     return selected_genre
 
-
+lim = 0
 #CREATES A LIST OF RECOMMENDED TRACKS BASED ON THE USERS TOP ARTISTS, TOP SONGS, AND TOP GENRES
 def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre):
     print('...recommending songs')
+    global lim
     lim = int(math.ceil(limit/2))
     uris = []
     selected_tracks = []
+    global recs1
+    global recs2
     min_genre_bounds = random.randint(0,len(selected_genre))
     min1_genre_bounds = random.randint(min_genre_bounds,len(selected_genre))
     print("Your first genre is :"+ str(selected_genre[min_genre_bounds:min_genre_bounds+1]))
@@ -172,16 +183,26 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
 	         limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
     query2 = (sp.recommendations(seed_artists=top_artists_uri[1:2], seed_genres=selected_genre[min1_genre_bounds:min1_genre_bounds+1],  seed_tracks=top_tracks_uri[1:2],
 	         limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
-
-    for i, j in enumerate(query['tracks']):
-        uris.append(j['uri'])
-        print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
-    for i, j in enumerate(query2['tracks']):
-        uris.append(j['uri'])
-        print(f"{i+1}) \"{j['name']}\" by {j['artists'][0]['name']}")
-
+    for song in query['tracks']:
+        uris.append(song['uri'])
+        strang = (f"{song['name']}\" by {song['artists'][0]['name']}")
+        print (strang)
+        recs1.append(strang)
+    for song in query2['tracks']:
+        uris.append(song['uri'])
+        strang = (f"{song['name']}\" by {song['artists'][0]['name']}")
+        print (strang)
+        recs2.append(strang)
     uris = list(set(uris))
+    recs1 = list(set(recs1))
+    recs2 = list(set(recs2))
     return uris
+
+def display_recommendation_songs():
+    recs = recs1 + recs2
+    print(recs)
+    return recs[0:(2*lim)]
+
 #FINALLY CREATES THE PLAYLIST AND ADDS THE RECOMMENDED SONGS FROM RECOMMEND_TRACKS
 def create_playlist(sp, selected_tracks_uri, limit, playlist_title, playlist_description):
     print('...creating playlist')
@@ -192,6 +213,5 @@ def create_playlist(sp, selected_tracks_uri, limit, playlist_title, playlist_des
     playlist_id = playlist_all_data["id"]
     playlist_uri = playlist_all_data["uri"]
 
-    random.shuffle(selected_tracks_uri)
     sp.user_playlist_add_tracks(user_id, playlist_id, selected_tracks_uri[0:limit])
     return playlist_uri
