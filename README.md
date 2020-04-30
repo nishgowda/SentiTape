@@ -19,7 +19,7 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
 
 **Authentication/Security:**
   - Flask Web Sessions
-  - Spotify Oauth Tokens: CLIENT ID, CLIENT SECRET, REDERICT URI, SCOPE (Learn about this at: https://developer.spotify.com/documentation/general/guides/authorization-guide/)
+  - Spotify Oauth Tokens - CLIENT ID, CLIENT SECRET, REDERICT URI, SCOPE (Learn about this at: https://developer.spotify.com/documentation/general/guides/authorization-guide/)
 
 **Back End:**
   - Python
