@@ -32,7 +32,8 @@ Vibetape propmpts the user to choose from an array of moods that they might be f
   - Javascript
   
 **TO DO:**
-  - [ ] Reconfigure index.html, Table View etc.
+  - [X] Reconfigure index.html, Table View etc.
+  - Fix bug with displaying users songs in check view
   - [ ] Get server hosted (Heroku, Google App Engine, AWS)
   - [X] Decide if database is needed (it's not -- Spotify secures user data; merely retrieving it)
   - [ ] \(Optional) Decide if sentiment analysis should replace vibe selection
