@@ -12,8 +12,8 @@ tempo = 0.0
 valence = 0.0
 energy = 0.0
 top_genres = []
-recs1 = []
-recs2 = []
+lim = 0
+recs = []
 
 def type_of_playlist(choice):
     global danceability
@@ -164,7 +164,7 @@ def get_one_genre():
             selected_genre.append(single)
     return selected_genre
 
-lim = 0
+
 #CREATES A LIST OF RECOMMENDED TRACKS BASED ON THE USERS TOP ARTISTS, TOP SONGS, AND TOP GENRES
 def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre):
     print('...recommending songs')
@@ -172,8 +172,7 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
     lim = int(math.ceil(limit/2))
     uris = []
     selected_tracks = []
-    global recs1
-    global recs2
+    global recs
     min_genre_bounds = random.randint(0,len(selected_genre))
     min1_genre_bounds = random.randint(min_genre_bounds,len(selected_genre))
     print("Your first genre is :"+ str(selected_genre[min_genre_bounds:min_genre_bounds+1]))
@@ -183,25 +182,22 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
 	         limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
     query2 = (sp.recommendations(seed_artists=top_artists_uri[1:2], seed_genres=selected_genre[min1_genre_bounds:min1_genre_bounds+1],  seed_tracks=top_tracks_uri[1:2],
 	         limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
+    recs.clear
     for song in query['tracks']:
         uris.append(song['uri'])
-        strang = (f"{song['name']}\" by {song['artists'][0]['name']}")
-        print (strang)
-        recs1.append(strang)
-    for song in query2['tracks']:
-        uris.append(song['uri'])
-        strang = (f"{song['name']}\" by {song['artists'][0]['name']}")
-        print (strang)
-        recs2.append(strang)
-    uris = list(set(uris))
-    recs1 = list(set(recs1))
-    recs2 = list(set(recs2))
+        print(f"{song['name']}\" by {song['artists'][0]['name']}")
+        recs.append(f"{song['name']}\" by {song['artists'][0]['name']}")
+    for track in query2['tracks']:
+        uris.append(track['uri'])
+        print(f"{track['name']}\" by {track['artists'][0]['name']}")
+        recs.append(f"{track['name']}\" by {track['artists'][0]['name']}")
     return uris
 
 def display_recommendation_songs():
-    recs = recs1 + recs2
+    global recs
     print(recs)
-    return recs[0:(2*lim)]
+    return recs
+    del recs
 
 #FINALLY CREATES THE PLAYLIST AND ADDS THE RECOMMENDED SONGS FROM RECOMMEND_TRACKS
 def create_playlist(sp, selected_tracks_uri, limit, playlist_title, playlist_description):
