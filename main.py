@@ -25,7 +25,18 @@ SHOW_DIALOG = True
 
 # Log in variable that updates when the user is logged in via Ouath Authenitication
 is_logged_in = False
-confirmed = False
+
+
+# GLOBAL VARIABLES
+limit = 0
+choice = ""
+playlist_title = ''
+playlist_description = ''
+selected_songs = []
+selected_songs2 = []
+recs = []
+recs1 = []
+
 # authorization-code-flow Step 1. Have your application request authorization;
 # the user logs in and authorizes access
 @app.route("/verify")
@@ -60,7 +71,7 @@ def index():
         num_albums = top_albums['total']
         recs=display_recommendation_songs()
         rec_size = len(recs)
-        return render_template("index.html", user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums, confirmed=confirmed, recs=recs)
+        return render_template("index.html", user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums, recs=recs)
     else:
         return redirect("/")
 
@@ -114,10 +125,7 @@ def user_data():
 # authorization-code-flow Step 3.
 # Use the access token to access the Spotify Web API;
 # Spotify returns requested data
-limit = 0
-choice = ""
-playlist_title = ''
-playlist_description = ''
+
 
 @app.route("/index", methods=['POST'])
 def go():
@@ -130,41 +138,34 @@ def go():
     choice = request.form['choice']
     playlist_title = request.form['playlist_title']
     playlist_description = request.form['playlist_description']
-    sp = spotipy.Spotify(auth=session['toke'])
-    auth = session['toke']
-    type_of_playlist(choice)
-    top_artists = aggregate_top_artists(sp)
-    top_tracks = aggregate_top_tracks(sp, top_artists)
-    selected_genre = get_one_genre()
-    selected_songs = recommend_tracks(sp, top_artists, limit, top_tracks, selected_genre)
-    if confirmed==False:
-        return redirect('/check')
-    elif confirmed==True:
-        playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
-        return render_template('playlist.html', playlist=playlist)
+    return redirect('/check')
 
-selected_songs = []
+
 
 
 @app.route("/check")
 def check():
-    global selected_songs
-    sp = spotipy.Spotify(auth=session['toke'])
-    type_of_playlist(choice)
-    top_artists = aggregate_top_artists(sp)
-    top_tracks = aggregate_top_tracks(sp, top_artists)
-    selected_genre = get_one_genre()
-    selected_songs = recommend_tracks(sp, top_artists, limit, top_tracks, selected_genre)
-    recs = display_recommendation_songs()
-    return render_template('check.html', recs=recs)
+    if is_logged_in == True:
+        global selected_songs
+        global recs
+        global selected_songs2
+        global recs1
+        sp = spotipy.Spotify(auth=session['toke'])
+        type_of_playlist(choice)
+        top_artists = aggregate_top_artists(sp)
+        top_tracks = aggregate_top_tracks(sp, top_artists)
+        selected_genre = get_one_genre()
+        selected_songs = recommend_tracks(sp, top_artists, limit, top_tracks, selected_genre)
+        recs = display_recommendation_songs()
+        return render_template('check.html', recs=recs)
+    else:
+        return redirect("/")
 
 @app.route("/check", methods=['POST'])
 def finish():
     sp = spotipy.Spotify(auth=session['toke'])
     playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
     return render_template('playlist.html', playlist=playlist)
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
