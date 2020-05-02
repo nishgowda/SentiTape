@@ -169,10 +169,11 @@ def get_one_genre():
 def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre):
     print('...recommending songs')
     global lim
+    global recs
     lim = int(math.ceil(limit/2))
     uris = []
     selected_tracks = []
-    global recs
+    fixed_songs = []
     min_genre_bounds = random.randint(0,len(selected_genre))
     min1_genre_bounds = random.randint(min_genre_bounds,len(selected_genre))
     print("Your first genre is :"+ str(selected_genre[min_genre_bounds:min_genre_bounds+1]))
@@ -182,20 +183,40 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
 	         limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
     query2 = (sp.recommendations(seed_artists=top_artists_uri[1:2], seed_genres=selected_genre[min1_genre_bounds:min1_genre_bounds+1],  seed_tracks=top_tracks_uri[1:2],
 	         limit=lim, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
-    recs.clear
     for song in query['tracks']:
         uris.append(song['uri'])
-        print(f"{song['name']}\" by {song['artists'][0]['name']}")
-        recs.append(f"{song['name']}\" by {song['artists'][0]['name']}")
+        fixed_songs.append(f"{song['name']}\" by {song['artists'][0]['name']}")
     for track in query2['tracks']:
         uris.append(track['uri'])
-        print(f"{track['name']}\" by {track['artists'][0]['name']}")
-        recs.append(f"{track['name']}\" by {track['artists'][0]['name']}")
-    return uris
+        fixed_songs.append(f"{track['name']}\" by {track['artists'][0]['name']}")
+
+    res = []
+    for i in uris:
+        if i not in res:
+            res.append(i)
+    for x in fixed_songs:
+        if x not in recs:
+            recs.append(x)
+    if len(res) < limit:
+        print('..res too small')
+        sub = limit-len(res)
+        query3 = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_genres=selected_genre[min_genre_bounds:1+min_genre_bounds],seed_tracks=top_tracks_uri[:1],
+	         limit=sub, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
+        for piece in query3["tracks"]:
+            res.append(piece["uri"])
+            recs.append(f"{piece['name']}\" by {piece['artists'][0]['name']}")
+    elif len(res) > limit:
+        print('..res too big')
+        diff = (len(res)-limit)
+        res.pop(diff)
+        recs.pop(diff)
+    for all_songs in recs:
+        print(all_songs)
+
+    return res
 
 def display_recommendation_songs():
     global recs
-    print(recs)
     return recs
     del recs
 
