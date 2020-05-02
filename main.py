@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 import json
 import os
-from vibetape_functions import display_recommendation_songs,get_one_genre,most_played_songs,followed_artists,type_of_playlist, aggregate_top_artists,saved_albums , saved_tracks,get_playlists ,following,get_one_genre, aggregate_top_tracks, recommend_tracks, create_playlist
+from vibetape_functions import retrieve_playlist_cover,display_recommendation_songs,get_one_genre,most_played_songs,followed_artists,type_of_playlist, aggregate_top_artists,saved_albums , saved_tracks,get_playlists ,following,get_one_genre, aggregate_top_tracks, recommend_tracks, create_playlist
 app = Flask(__name__)
 
 app.secret_key = str(os.urandom(24))
@@ -14,11 +14,11 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "REDIRECT_URI"
+REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "CLIENT_ID"
-CLI_SEC = 'CLIENT_SECRET'
+CLI_ID = "024101f673b84950835f8a32a6c53a9f"
+CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
@@ -71,7 +71,11 @@ def index():
         num_albums = top_albums['total']
         recs=display_recommendation_songs()
         rec_size = len(recs)
-        return render_template("index.html", user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums, recs=recs)
+        if  not user_all_data["images"]:
+            user_image = ""
+        else:
+            user_image = user_all_data["images"][0]["url"]
+        return render_template("index.html", user_image=user_image, user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums, recs=recs)
     else:
         return redirect("/")
 
@@ -165,7 +169,8 @@ def check():
 def finish():
     sp = spotipy.Spotify(auth=session['toke'])
     playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
-    return render_template('playlist.html', playlist=playlist)
+    playlist_cover = retrieve_playlist_cover(sp)
+    return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
 
 if __name__ == "__main__":
     app.run(debug=True)

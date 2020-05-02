@@ -4,6 +4,7 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
+
 <html>
 	<head>
 		<title>Vibetape</title>
@@ -11,6 +12,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="static/assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="static/assets/css/noscript.css" /></noscript>
+		<style>
+			
+			.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+  }
+		</style>
 	</head>
 	<body class="is-preload">
 		<div id="wrapper">
@@ -23,9 +32,7 @@
 						<h1>You're all set!</h1>
 						<p>Click below to check out your Vibetape</p>
 						<nav>
-							<ul>
-								<li><a onclick="window.location.href='{{playlist}}'" class="icon brands fa-spotify"><span class="label">Spotify</span></a></li>
-							</ul>
+						<p><img src="{{playlist_cover}}" width="300" height="300" onclick="window.location.href='{{playlist}}'" class="center"></p>
 						</nav>
 					</header>
 
