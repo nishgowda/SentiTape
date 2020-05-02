@@ -21,9 +21,26 @@
         h5 {display:inline;}
         h7 {display:inline;}
     </style>
+    <style>
+   .image-cropper {
+    width: 150;
+    height: 150;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+    .profile-pic {
+  display: inline;
+  margin: 0 auto;
+ 
+}
+    </style>
+
 </head>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-white">
-    <a class="navbar-brand" href="index">Vibetape</a>
+    <a class="navbar-brand" href="#">
+      </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -48,9 +65,12 @@
 
                     <center>
                        
-                        <h1>Welcome {{user_id}}</h1>
-                        <hr size="20">
-         
+                        <h1>Welcome {{user_id}}  </h1>
+                        <hr>
+                        <div class="image-cropper">
+                        <img src="{{user_image}}" alt="" class="profile-pic">
+                        </div>
+                     
                         <script src="static/js/odometer.js"></script>
                         <div>
                         <h5 class="playlist-odometer">0</h5>

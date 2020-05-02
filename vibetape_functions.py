@@ -14,7 +14,7 @@ energy = 0.0
 top_genres = []
 lim = 0
 recs = []
-
+playlist_id = []
 def type_of_playlist(choice):
     global danceability
     global energy
@@ -204,10 +204,17 @@ def create_playlist(sp, selected_tracks_uri, limit, playlist_title, playlist_des
     print('...creating playlist')
     user_all_data = sp.current_user()
     user_id = user_all_data["id"]
-
+    global playlist_id
     playlist_all_data = sp.user_playlist_create(user_id, playlist_title, description=playlist_description)
     playlist_id = playlist_all_data["id"]
     playlist_uri = playlist_all_data["uri"]
 
     sp.user_playlist_add_tracks(user_id, playlist_id, selected_tracks_uri[0:limit])
+    
     return playlist_uri
+def retrieve_playlist_cover(sp):
+    user_all_data = sp.current_user()
+    user_id = user_all_data["id"]
+
+    playlist_cover = sp.playlist_cover_image(playlist_id)
+    return playlist_cover[0]["url"]
