@@ -190,6 +190,8 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
         uris.append(track['uri'])
         fixed_songs.append(f"{track['name']}\" by {track['artists'][0]['name']}")
 
+    ## REMOVE DUPLICATE SONGS FROM PLAYLIST AND REPLACE THEM WITH NEW ONES
+    ## ALSO POPS ANY SONGS FROM URIS IF THE LIST LENGTH IS BIGGER THAN LIMIT (CAUSED BY AN ISSUE WITH RECCOMEDATIONS)
     res = []
     for i in uris:
         if i not in res:
@@ -199,7 +201,9 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
             recs.append(x)
     if len(res) < limit:
         print('..res too small')
+        print(len(res))
         sub = limit-len(res)
+        print(sub)
         query3 = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_genres=selected_genre[min_genre_bounds:1+min_genre_bounds],seed_tracks=top_tracks_uri[:1],
 	         limit=sub, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
         for piece in query3["tracks"]:
@@ -208,8 +212,8 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
     elif len(res) > limit:
         print('..res too big')
         diff = (len(res)-limit)
-        res.pop(diff)
-        recs.pop(diff)
+        res.remove(diff)
+        recs.remove(diff)
     for all_songs in recs:
         print(all_songs)
 
