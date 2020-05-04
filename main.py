@@ -14,19 +14,18 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "REDIRECT_URI"
+REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "CLIENT_ID"
-CLI_SEC = 'CLIENT_SECRET'
+CLI_ID = "024101f673b84950835f8a32a6c53a9f"
+CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
 
 # Log in variable that updates when the user is logged in via Ouath Authenitication
 is_logged_in = False
-
-
+reqs = False
 # GLOBAL VARIABLES
 limit = 0
 choice = ""
@@ -35,7 +34,6 @@ playlist_description = ''
 selected_songs = []
 selected_songs2 = []
 recs = []
-recs1 = []
 
 # authorization-code-flow Step 1. Have your application request authorization;
 # the user logs in and authorizes access
@@ -48,6 +46,7 @@ def verify():
 # Home page, user must log in
 @app.route("/", methods=['GET', 'POST'])
 def home():
+
     if request.method == 'POST':
         return redirect(url_for('verify'))
 
@@ -57,7 +56,9 @@ def home():
 # User must be logged into spotify, else redirected to home page
 @app.route("/index")
 def index():
-    if is_logged_in == True:
+    global reqs
+    if is_logged_in == True and reqs== False:
+        reqs = True
         sp = spotipy.Spotify(auth=session['toke'])
         user_all_data = sp.current_user()
         user_id = user_all_data["display_name"]
@@ -108,7 +109,7 @@ def api_callback():
 # User must be logged in, else redirected back to the home route
 @app.route("/data", methods=['GET', 'POST'])
 def user_data():
-    if is_logged_in == True:
+    if is_logged_in == True and reqs == True:
         if request.method == 'POST':
             time = request.form['time']
             limit = request.form['limit']
@@ -149,11 +150,10 @@ def go():
 
 @app.route("/check")
 def check():
-    if is_logged_in == True:
+    if is_logged_in == True and reqs == True:
         global selected_songs
         global recs
         global selected_songs2
-        global recs1
         sp = spotipy.Spotify(auth=session['toke'])
         type_of_playlist(choice)
         top_artists = aggregate_top_artists(sp)
@@ -167,10 +167,13 @@ def check():
 
 @app.route("/check", methods=['POST'])
 def finish():
+    global reqs
     sp = spotipy.Spotify(auth=session['toke'])
     playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
     playlist_cover = retrieve_playlist_cover(sp)
+    reqs = False
     return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
