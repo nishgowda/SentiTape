@@ -199,24 +199,25 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
     for x in fixed_songs:
         if x not in recs:
             recs.append(x)
-    if len(res) < limit:
-        print('..res too small')
+    while(len(res)<limit):
+        print('..res too small limit')
         print(len(res))
-        sub = limit-len(res)
+        sub = int((limit-len(res)) + 1)
         print(sub)
         query3 = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_genres=selected_genre[min_genre_bounds:1+min_genre_bounds],seed_tracks=top_tracks_uri[:1],
 	         limit=sub, target_danceability=danceability, target_valence=valence, target_tempo=tempo, target_energy=energy))
         for piece in query3["tracks"]:
             res.append(piece["uri"])
             recs.append(f"{piece['name']}\" by {piece['artists'][0]['name']}")
-    elif len(res) > limit:
+            break
+    if(len(res) > limit):
         print('..res too big')
         diff = (len(res)-limit)
-        res.remove(diff)
-        recs.remove(diff)
+        res.pop(diff)
+        recs.pop(diff)
+
     for all_songs in recs:
         print(all_songs)
-
     return res
 
 def display_recommendation_songs():

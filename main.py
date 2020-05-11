@@ -57,7 +57,7 @@ def home():
 @app.route("/index")
 def index():
     global reqs
-    if is_logged_in == True and reqs== False:
+    if is_logged_in == True:
         reqs = True
         sp = spotipy.Spotify(auth=session['toke'])
         user_all_data = sp.current_user()
@@ -109,7 +109,7 @@ def api_callback():
 # User must be logged in, else redirected back to the home route
 @app.route("/data", methods=['GET', 'POST'])
 def user_data():
-    if is_logged_in == True and reqs == True:
+    if is_logged_in == True:
         if request.method == 'POST':
             time = request.form['time']
             limit = request.form['limit']
@@ -150,7 +150,7 @@ def go():
 
 @app.route("/check")
 def check():
-    if is_logged_in == True and reqs == True:
+    if is_logged_in == True:
         global selected_songs
         global recs
         global selected_songs2
@@ -171,7 +171,6 @@ def finish():
     sp = spotipy.Spotify(auth=session['toke'])
     playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
     playlist_cover = retrieve_playlist_cover(sp)
-    reqs = False
     return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
 
 
