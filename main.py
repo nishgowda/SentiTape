@@ -7,7 +7,7 @@ import spotipy.util as util
 import json
 import os
 from vibetape_functions import retrieve_playlist_cover,display_recommendation_songs,get_one_genre,most_played_songs,followed_artists,type_of_playlist, aggregate_top_artists,saved_albums , saved_tracks,get_playlists ,following,get_one_genre, aggregate_top_tracks, recommend_tracks, create_playlist
-from senti import extract_features, get_the_mood
+from senti import Sentiments
 app = Flask(__name__)
 
 app.secret_key = str(os.urandom(24))
@@ -15,11 +15,11 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "RED_URI"
+REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "CLI_ID"
-CLI_SEC = 'CLI_SEC'
+CLI_ID = "024101f673b84950835f8a32a6c53a9f"
+CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
@@ -156,8 +156,13 @@ def check():
         global selected_songs
         global recs
         sp = spotipy.Spotify(auth=session['toke'])
-        mood = get_the_mood(choice)
-        type_of_playlist(mood)
+        t = Sentiments()
+        t.get_the_mood(choice)
+        mood = t.senti
+        prob = t.prob
+        print(mood)
+        print(prob)
+        type_of_playlist(mood,prob)
         top_artists = aggregate_top_artists(sp)
         top_tracks = aggregate_top_tracks(sp, top_artists)
         selected_genre = get_one_genre()

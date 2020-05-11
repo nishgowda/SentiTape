@@ -17,44 +17,49 @@ recs = []
 playlist_id = []
 
 
-def type_of_playlist(choice):
+def type_of_playlist(mood, prob):
     global danceability
     global energy
     global tempo
     global valence
     print('Mood is: ')
-    if choice <= 0.3:
-        print('mellow')
-        danceability += 0.3
-        tempo += 35
-        valence += 0.2
-        energy += 0.3
-    if choice > 0.3 and choice <= 0.4:
-        print('productive')
-        danceability += 0.2
-        energy += 0.3
-        tempo += 45.0
-        valence += 0.4
-    elif choice > 0.4 and choice <= 0.6:
-        print('chill')
+    if prob <= 0.4 and mood=='Negative':
+        print('Chill')
         danceability += 0.6
         energy += 0.5
         tempo += 65.0
         valence += 0.5
-    elif choice > 0.6 and choice <= 0.8:
+    if prob > 0.3 and prob <= 0.4 and mood=='Positive':
+        print('productive')
+        danceability += 0.2
+        energy += 0.3
+        tempo += 45.0
+        valence += 0.4     
+    elif prob >= 0.5 and prob <= 0.8 and mood=='Positive':
         print('happy')
         danceability += 0.8
         tempo += 95
         valence += 1.0
         energy += 0.9
-    elif choice > 0.8:
+    elif prob > 0.6 and prob <= 0.8 and mood=='Negative':
+        print('mellow')
+        danceability += 0.8
+        tempo += 95
+        valence += 1.0
+        energy += 0.9
+    elif prob > 0.8 and mood=='Positive':
         print('pumped')
         danceability += 0.9
         energy += 0.9
         tempo += 115.0
         valence += 0.8
     else:
-        print("That wasn't one of the choices, please pick again")
+        print('doing else')
+        danceability += 0.5
+        energy += 0.5
+        tempo += 85.0
+        valence += 0.5
+        
 #GETS A LIST OF THE USERS TOP ARTISTS
 def aggregate_top_artists(sp):
     print('...getting your top artists')
