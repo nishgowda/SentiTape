@@ -15,36 +15,44 @@ top_genres = []
 lim = 0
 recs = []
 playlist_id = []
+
+
 def type_of_playlist(choice):
     global danceability
     global energy
     global tempo
     global valence
-    if choice == 'Pumped':
-        danceability += 0.9
-        energy += 0.9
-        tempo += 115.0
-        valence += 0.8
-    elif choice == 'Happy':
-        danceability += 0.8
-        tempo += 95
-        valence += 1.0
-        energy += 0.9
-    elif choice == 'Chill':
-        danceability += 0.6
-        energy += 0.5
-        tempo += 65.0
-        valence += 0.5
-    elif choice =='Melllow':
+    print('Mood is: ')
+    if choice <= 0.3:
+        print('mellow')
         danceability += 0.3
         tempo += 35
         valence += 0.2
         energy += 0.3
-    elif choice == 'Productive':
+    if choice > 0.3 and choice <= 0.4:
+        print('productive')
         danceability += 0.2
         energy += 0.3
         tempo += 45.0
         valence += 0.4
+    elif choice > 0.4 and choice <= 0.6:
+        print('chill')
+        danceability += 0.6
+        energy += 0.5
+        tempo += 65.0
+        valence += 0.5
+    elif choice > 0.6 and choice <= 0.8:
+        print('happy')
+        danceability += 0.8
+        tempo += 95
+        valence += 1.0
+        energy += 0.9
+    elif choice > 0.8:
+        print('pumped')
+        danceability += 0.9
+        energy += 0.9
+        tempo += 115.0
+        valence += 0.8
     else:
         print("That wasn't one of the choices, please pick again")
 #GETS A LIST OF THE USERS TOP ARTISTS
@@ -65,10 +73,8 @@ def aggregate_top_artists(sp):
     random.shuffle(top_artists_name)
     print("Your first artist is: " + str(top_artists_name[:1]))
     print("Your second artist is: " + str(top_artists_name[1:2]))
-   #print('number of saved playlists' +str(sp.current_user_playlists()))
     top_tracks = sp.current_user_saved_tracks()
     print('number of saved tracks' +str((top_tracks['total'])))
-    #print('number of saved playlists' +str(sp.current_user_saved_albums()))
     return top_artists_uri
 
 def get_playlists(sp):
@@ -216,8 +222,8 @@ def recommend_tracks(sp, top_artists_uri, limit, top_tracks_uri, selected_genre)
         res.pop(diff)
         recs.pop(diff)
 
-    for all_songs in recs:
-        print(all_songs)
+    for i,j in enumerate(recs):
+        print(f"{i+1}) \"{j}")
     return res
 
 def display_recommendation_songs():
