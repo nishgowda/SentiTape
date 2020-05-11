@@ -14,11 +14,11 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
+REDIRECT_URI = "REDIRECT_URI"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "024101f673b84950835f8a32a6c53a9f"
-CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
+CLI_ID = "CLI_ID"
+CLI_SEC = 'CLI_SEC'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
