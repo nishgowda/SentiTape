@@ -14,11 +14,11 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "REDIRECT_URI"
+REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "CLI_ID"
-CLI_SEC = 'CLI_SEC'
+CLI_ID = "024101f673b84950835f8a32a6c53a9f"
+CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
@@ -32,8 +32,9 @@ choice = ""
 playlist_title = ''
 playlist_description = ''
 selected_songs = []
-selected_songs2 = []
 recs = []
+playlist = []
+playlist_cover = []
 
 # authorization-code-flow Step 1. Have your application request authorization;
 # the user logs in and authorizes access
@@ -153,7 +154,6 @@ def check():
     if is_logged_in == True:
         global selected_songs
         global recs
-        global selected_songs2
         sp = spotipy.Spotify(auth=session['toke'])
         type_of_playlist(choice)
         top_artists = aggregate_top_artists(sp)
@@ -164,26 +164,34 @@ def check():
         return redirect("/songs")
     else:
         return redirect("/")
-playlist = []
-playlist_cover = []
+
 @app.route("/songs")
 def songs():
-    global recs
-    return render_template('check.html', recs=recs)
+    if is_logged_in == True:
+        global recs
+        return render_template('check.html', recs=recs)
+    else:
+        return redirect("/")
 
 @app.route("/songs", methods=['POST'])
 def finish():
-    global reqs
-    global playlist
-    global playlist_cover
-    sp = spotipy.Spotify(auth=session['toke'])
-    playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
-    playlist_cover = retrieve_playlist_cover(sp)
-    return redirect('/done')
+    if is_logged_in == True:
+        global reqs
+        global playlist
+        global playlist_cover
+        sp = spotipy.Spotify(auth=session['toke'])
+        playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
+        playlist_cover = retrieve_playlist_cover(sp)
+        return redirect('/done')
+    else:
+        return redirect("/")
 
 @app.route("/done")
 def done():
-    return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
+    if is_logged_in == True:
+        return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
+    else:
+        return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
