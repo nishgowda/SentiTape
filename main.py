@@ -161,18 +161,29 @@ def check():
         selected_genre = get_one_genre()
         selected_songs = recommend_tracks(sp, top_artists, limit, top_tracks, selected_genre)
         recs = display_recommendation_songs()
-        return render_template('check.html', recs=recs)
+        return redirect("/songs")
     else:
         return redirect("/")
+playlist = []
+playlist_cover = []
+@app.route("/songs")
+def songs():
+    global recs
+    return render_template('check.html', recs=recs)
 
-@app.route("/check", methods=['POST'])
+@app.route("/songs", methods=['POST'])
 def finish():
     global reqs
+    global playlist
+    global playlist_cover
     sp = spotipy.Spotify(auth=session['toke'])
     playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
     playlist_cover = retrieve_playlist_cover(sp)
-    return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
+    return redirect('/done')
 
+@app.route("/done")
+def done():
+    return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
 
 if __name__ == "__main__":
     app.run(debug=True)
