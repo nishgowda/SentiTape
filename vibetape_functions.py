@@ -9,7 +9,7 @@ import math
 
 
 
-class Vibetape:
+class Vibetape():
     danceability= 0.0 
     tempo = 0.0 
     valence = 0.0 
@@ -20,6 +20,16 @@ class Vibetape:
     playlist_id =[]
     def __init__self(self):
         pass
+    def reset(self):
+        Vibetape.danceability = 0.0
+        danceability= 0.0
+        tempo = 0.0
+        valence = 0.0
+        energy = 0.0
+        top_genres =[]
+        lim = 0.0 
+        recs =[]
+        playlist_id =[]
 
     def type_of_playlist(self,mood, prob):
         print('Mood is: ')
@@ -63,24 +73,24 @@ class Vibetape:
     #GETS A LIST OF THE USERS TOP ARTISTS
     def aggregate_top_artists(self,sp):
         print('...getting your top artists')
-        top_artists_name = []
-        top_artists_uri = []
+        self.top_artists_name = []
+        self.top_artists_uri = []
         ranges = ['short_term', 'medium_term', 'long_term']
         for r in ranges:
             top_artists_all_data = sp.current_user_top_artists(limit=10, time_range=r)
             top_artists_data = top_artists_all_data['items']
             for artist_data in top_artists_data:
-                if (artist_data["name"] not in top_artists_name):
-                    top_artists_name.append(artist_data['name'])
-                    top_artists_uri.append(artist_data['uri'])
+                if (artist_data["name"] not in self.top_artists_name):
+                    self.top_artists_name.append(artist_data['name'])
+                    self.top_artists_uri.append(artist_data['uri'])
                     Vibetape.top_genres.append(artist_data["genres"])
-        random.shuffle(top_artists_uri)
-        random.shuffle(top_artists_name)
-        print("Your first artist is: " + str(top_artists_name[:1]))
-        print("Your second artist is: " + str(top_artists_name[1:2]))
+        random.shuffle(self.top_artists_uri)
+        random.shuffle(self.top_artists_name)
+        print("Your first artist is: " + str(self.top_artists_name[:1]))
+        print("Your second artist is: " + str(self.top_artists_name[1:2]))
         top_tracks = sp.current_user_saved_tracks()
         print('number of saved tracks' +str((top_tracks['total'])))
-        return top_artists_uri
+        return self.top_artists_uri
 
     def get_playlists(self,sp):
         playlists = sp.current_user_playlists()
@@ -150,30 +160,30 @@ class Vibetape:
     #GETS A LIST OF THE TOP TRACKS FROM THE USERS TOP ARTISTS
     def aggregate_top_tracks(self,sp, top_artists_uri):
         print("...getting top tracks")
-        top_tracks_uri = []
+        self.top_tracks_uri = []
         for artist in top_artists_uri:
             top_tracks_all_data = sp.artist_top_tracks(artist)
             top_tracks_data = top_tracks_all_data['tracks']
             for track_data in top_tracks_data:
-                top_tracks_uri.append(track_data['uri'])
-        random.shuffle(top_tracks_uri)
-        return top_tracks_uri
+                self.top_tracks_uri.append(track_data['uri'])
+        random.shuffle(self.top_tracks_uri)
+        return self.top_tracks_uri
 
     def following(self,sp):
-        top_artists_name = []
+        self.top_artists_name = []
         followed_artists_all_data = sp.current_user_followed_artists(limit=50)
         followed_artists_data = (followed_artists_all_data['artists'])
         for artist_data in followed_artists_data["items"]:
-            if artist_data["name"] not in top_artists_name:
-                top_artists_name.append(artist_data['name'])
-        return len(top_artists_name)
+            if artist_data["name"] not in self.top_artists_name:
+                self.top_artists_name.append(artist_data['name'])
+        return len(self.top_artists_name)
     #ITERATES THROUGH THE TOP GENRES OF THE USRE"S TOP ARTISTS
     def get_one_genre(self):
-        selected_genre = []
+        self.selected_genre = []
         for genres in (Vibetape.top_genres):
             for single in genres:
-                selected_genre.append(single)
-        return selected_genre
+                self.selected_genre.append(single)
+        return self.selected_genre
 
 
     #CREATES A LIST OF RECOMMENDED TRACKS BASED ON THE USERS TOP ARTISTS, TOP SONGS, AND TOP GENRES
@@ -183,14 +193,14 @@ class Vibetape:
         uris = []
         selected_tracks = []
         fixed_songs = []
-        min_genre_bounds = random.randint(0,len(selected_genre))
-        min1_genre_bounds = random.randint(min_genre_bounds,len(selected_genre))
-        print("Your first genre is :"+ str(selected_genre[min_genre_bounds:min_genre_bounds+1]))
-        print("Your second genre is :"+ str(selected_genre[min1_genre_bounds:min1_genre_bounds+1]))
+        min_genre_bounds = random.randint(0,len(self.selected_genre))
+        min1_genre_bounds = random.randint(min_genre_bounds,len(self.selected_genre))
+        print("Your first genre is :"+ str(self.selected_genre[min_genre_bounds:min_genre_bounds+1]))
+        print("Your second genre is :"+ str(self.selected_genre[min1_genre_bounds:min1_genre_bounds+1]))
 
-        query = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_genres=selected_genre[min_genre_bounds:1+min_genre_bounds],seed_tracks=top_tracks_uri[:1],
+        query = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_genres=self.selected_genre[min_genre_bounds:1+min_genre_bounds],seed_tracks=top_tracks_uri[:1],
                 limit=lim, target_danceability=Vibetape.danceability, target_valence=Vibetape.valence, target_tempo=Vibetape.tempo, target_energy=Vibetape.energy))
-        query2 = (sp.recommendations(seed_artists=top_artists_uri[1:2], seed_genres=selected_genre[min1_genre_bounds:min1_genre_bounds+1],  seed_tracks=top_tracks_uri[1:2],
+        query2 = (sp.recommendations(seed_artists=top_artists_uri[1:2], seed_genres=self.selected_genre[min1_genre_bounds:min1_genre_bounds+1],  seed_tracks=top_tracks_uri[1:2],
                 limit=lim, target_danceability=Vibetape.danceability, target_valence=Vibetape.valence, target_tempo=Vibetape.tempo, target_energy=Vibetape.energy))
         for song in query['tracks']:
             uris.append(song['uri'])
@@ -202,6 +212,7 @@ class Vibetape:
         ## REMOVE DUPLICATE SONGS FROM PLAYLIST AND REPLACE THEM WITH NEW ONES
         ## ALSO POPS ANY SONGS FROM URIS IF THE LIST LENGTH IS BIGGER THAN LIMIT (CAUSED BY AN ISSUE WITH RECCOMEDATIONS)
         res = []
+        Vibetape.recs.clear()
         for i in uris:
             if i not in res:
                 res.append(i)
@@ -214,7 +225,7 @@ class Vibetape:
                 print(len(res))
                 sub = int((limit-len(res)))
                 print(sub)
-                query3 = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_genres=selected_genre[min_genre_bounds:1+min_genre_bounds],seed_tracks=top_tracks_uri[:1],
+                query3 = (sp.recommendations(seed_artists=top_artists_uri[:1], seed_genres=self.selected_genre[min_genre_bounds:1+min_genre_bounds],seed_tracks=top_tracks_uri[:1],
                         limit=sub, target_danceability=Vibetape.danceability, target_valence=Vibetape.valence, target_tempo=Vibetape.tempo, target_energy=Vibetape.energy))
                 for piece in query3["tracks"]:
                     res.append(piece["uri"])
@@ -229,11 +240,13 @@ class Vibetape:
             break
         for i,j in enumerate(Vibetape.recs):
             print(f"{i+1}) \"{j}")
-        Vibetape.recs
-        return Vibetape.recs
+        return res
 
     def display_recommendation_songs(self):
-        songs = Vibetape.recs 
+        songs = []
+        for tracks in Vibetape.recs:
+            songs.append(tracks)
+ 
         return songs
 
 
@@ -255,3 +268,27 @@ class Vibetape:
 
         playlist_cover = sp.playlist_cover_image(Vibetape.playlist_id)
         return playlist_cover[0]["url"]
+    
+    def retrieve_all_playlists_cover(self, sp):
+        user_all_data = sp.current_user()
+        user_id = user_all_data["id"]
+        playlist_ids = []
+        playlist_covers = []
+        playlists = sp.current_user_playlists()
+        playlist_urls = []
+        print((playlists["total"]))
+
+        for playlist in playlists["items"]:
+            playlist_cover_all_data = playlist['id']
+            playlist_ids.append(playlist_cover_all_data)
+        print(len(playlist_ids))
+        
+        for ids in playlist_ids:
+            images = sp.playlist_cover_image(ids)
+            playlist_covers.append(images)
+
+        for urls in playlist_covers:
+            image_url = urls[0]["url"]
+            playlist_urls.append(image_url)
+       
+        return playlist_urls

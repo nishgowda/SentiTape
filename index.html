@@ -1,0 +1,244 @@
+<!DOCTYPE html5>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vibetape</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="static/fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="static/vendor/nouislider/nouislider.min.css">
+    
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="static/css/odometer.css" />
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+    <style>
+        h5 {display:inline;}
+        h7 {display:inline;}
+    </style>
+    <style>
+   .image-cropper {
+    width: 175;
+    height: 175;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+    .profile-pic {
+  display: inline;
+  margin: 0 auto;
+ 
+
+}
+
+.body{
+    background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+}
+.footer{
+    background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+}
+
+
+
+    </style>
+
+</head>
+<nav class="navbar navbar-expand-lg navbar-light bg-transparent">
+    <a class="navbar-brand" href="#">
+      </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" href="index">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-item nav-link" href="data">Data</a>
+        <a class="nav-item nav-link" href="#">Contact</a>
+      </div>
+    </div>
+  </nav>
+<body class="body">
+    <div class="main">
+        <div class="container">
+                    <center>
+                        <h1>Welcome {{user_id}}  </h1>
+                        <hr>
+                        <p class="image-cropper">
+                        <img src="{{user_image}}" alt="" class="profile-pic">
+                        </p>
+                        <div class="p-3 mb-2 bg-dark text-white">
+                        <script src="static/js/odometer.js"></script>
+                        <div>
+                        <h5 class="playlist-odometer">0</h5>
+                        <h5> Playlists |</h5>
+                        <h5 class="track-odometer">0</h5>
+                        <h5> Liked Songs |</h5>
+                        <h5 class="album-odometer">0</h5>
+                        <h5> Saved Albums </h5>
+                    </div>
+                    <div>
+                        <h7 class="followers-odometer">0</h7>
+                        <h7>    Followers| </h7>
+                        <h7 class="following-odometer">0</h7>
+                        <h7> Following |</h7>
+                        <h7 class="artists-odometer">0</h7>
+                        <h7> Artists Followed</h7>
+                    </div>
+                </div>
+                      <script>
+                        const playlistOdometer = document.querySelector(".playlist-odometer");
+                        const odometer = new Odometer({
+                            el: playlistOdometer,  
+
+                        })
+                        playlistOdometer.innerHTML = {{num_playlists}};
+                      </script>
+                      <script>
+                          const trackOdometer = document.querySelector(".track-odometer");
+                          const odometer2 = new Odometer({
+                            el:  trackOdometer,
+                        })
+                        trackOdometer.innerHTML = {{num_tracks}};
+                      </script>
+                      <script>
+                         const albumOdometer = document.querySelector(".album-odometer");
+                        const odometer3 = new Odometer({
+                          el:  albumOdometer,
+                      })
+                      albumOdometer.innerHTML = {{num_albums}};
+                    </script>
+                    <script>
+                        const followerOdometer = document.querySelector(".followers-odometer");
+                       const odometer4 = new Odometer({
+                         el:  followerOdometer,
+                     })
+                     followerOdometer.innerHTML = {{followers}};
+                   </script>
+                   <script>
+                   const followingOdometer = document.querySelector(".following-odometer");
+                   const odometer5 = new Odometer({
+                     el:  followingOdometer,
+                 })
+                 followingOdometer.innerHTML = {{friends}};
+               </script>
+               <script>
+                 const artistOdometer = document.querySelector(".artists-odometer");
+                const odometer6 = new Odometer({
+                  el:  artistOdometer,
+              })
+              artistOdometer.innerHTML = {{top_artists}};
+            </script>
+
+                    <form method="POST">
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <label for="limit" span class="input-group-text" id="inputGroup-sizing-default">Number of Songs</span>
+                                </div>
+                                <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" min="1" max="100"name="limit" id="limit" required>
+                              </div>
+                        
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">Playlist Title and Description</span>
+                                    </div>
+                                    <input type="text" aria-label="First name" class="form-control" name="playlist_title" id="playlist_title" required>
+                                    <input type="text" aria-label="Last name" class="form-control" name="playlist_description" id="playlist_description" required>
+                                  </div>
+                            
+                
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <label for="choice" span class="input-group-text" id="inputGroup-sizing-default">What is your vibe?</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="choice" id="choice" required>
+                              </div>
+
+                                    </div>
+                    <div class="input-group mb-3">
+                     <div class="input-group-prepend">
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-dark" value="Submit" id="submit" name="submit">Submit</button>
+                       
+                        </div>
+                     </div>
+                    </div>
+    </div>
+  
+
+
+                    </form>
+               
+
+                
+            
+                </div>
+                
+            </div>
+        </div>
+
+ 
+</div>  </div>
+</div>
+</body>
+
+    <!-- Footer -->
+    <footer class="page-footer font-small special-color-dark pt-4">
+        <!-- Footer Elements -->
+        <div class="container">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              {% for covers in playlist_covers %}
+                    <div class="carousel-item {% if loop.index == 1 %} active {% endif %}" id="slide{{ loop.index }}">
+                      <img src="{{covers}}" width=200 height=200> 
+                    </div>
+            {% endfor %} 
+           </div>
+            <a class="carousel-control-prev" href="#pageCarousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon bg-primary" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#pageCarousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon bg-primary" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+    
+        </div>
+                  
+                  </div>
+            </div>
+        
+        
+    </footer>
+    <script src="js/bootstrap.min.js"></script>
+   		<script>
+			window.onload = function() { document.body.classList.remove('is-preload'); }
+			window.ontouchmove = function() { return false; }
+			window.onorientationchange = function() { document.body.scrollTop = 0; }
+		</script>
+
+    <!-- JS -->
+    <script src="static/js/odometer.js"></script>
+    <script src="static/vendor/jquery/jquery.min.js"></script>
+    <script src="static/vendor/nouislider/nouislider.min.js"></script>
+    <script src="static/vendor/wnumb/wNumb.js"></script>
+    <script src="static/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="static/vendor/jquery-validation/dist/additional-methods.min.js"></script>
+  
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="/__/firebase/7.14.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="/__/firebase/7.14.0/firebase-analytics.js"></script>
+
+<!-- Initialize Firebase -->
+<script src="/__/firebase/init.js"></script>
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+
+</html>

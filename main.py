@@ -15,11 +15,11 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "RED_URI"
+REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "CLI_ID"
-CLI_SEC = 'CLI_SEC'
+CLI_ID = "024101f673b84950835f8a32a6c53a9f"
+CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
@@ -36,7 +36,7 @@ selected_songs = []
 recs = []
 playlist = []
 playlist_cover = []
-
+vibetape = Vibetape()
 # authorization-code-flow Step 1. Have your application request authorization;
 # the user logs in and authorizes access
 @app.route("/verify")
@@ -50,17 +50,21 @@ def verify():
 def home():
 
     if request.method == 'POST':
+        query = Vibetape.delete()
+        query.execute()
         return redirect(url_for('verify'))
 
-    return render_template("home.html")
+    return redirect("login")
 
+@app.route("/login")
+def newHome():
+    return render_template("home.html")
 # App route to the Index page
 # User must be logged into spotify, else redirected to home page
 @app.route("/index")
 def index():
     global reqs
     if is_logged_in == True:
-        vibetape = Vibetape()
         reqs = True
         sp = spotipy.Spotify(auth=session['toke'])
         user_all_data = sp.current_user()
@@ -73,11 +77,12 @@ def index():
         num_tracks = int(top_tracks['total'])
         top_albums = sp.current_user_saved_albums()
         num_albums = top_albums['total']
+        playlist_covers = vibetape.retrieve_all_playlists_cover(sp)
         if  not user_all_data["images"]:
             user_image = ""
         else:
             user_image = user_all_data["images"][0]["url"]
-        return render_template("index.html", user_image=user_image, user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums)
+        return render_template("index.html", user_image=user_image, user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums, playlist_covers=playlist_covers)
     else:
         return redirect("/")
 
@@ -114,7 +119,6 @@ def api_callback():
 def user_data():
     
     if is_logged_in == True:
-        vibetape = Vibetape()
         if request.method == 'POST':
             time = request.form['time']
             limit = request.form['limit']
@@ -156,7 +160,6 @@ def go():
 @app.route("/check")
 def check():
     if is_logged_in == True:
-        vibetape = Vibetape()
         global selected_songs
         global recs
         sp = spotipy.Spotify(auth=session['toke'])
@@ -190,7 +193,6 @@ def finish():
         global reqs
         global playlist
         global playlist_cover
-        vibetape = Vibetape()
         sp = spotipy.Spotify(auth=session['toke'])
         playlist = vibetape.create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
         playlist_cover = vibetape.retrieve_playlist_cover(sp)
@@ -198,11 +200,15 @@ def finish():
     else:
         return redirect("/")
 
+
 @app.route("/done")
 def done():
     if is_logged_in == True:
+        global vibetape
+        vibetape.reset()
         return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
     else:
+        
         return redirect("/")
 
 if __name__ == "__main__":
