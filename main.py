@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
 import json
 import os
-from vibetape_functions import retrieve_playlist_cover,display_recommendation_songs,get_one_genre,most_played_songs,followed_artists,type_of_playlist, aggregate_top_artists,saved_albums , saved_tracks,get_playlists ,following,get_one_genre, aggregate_top_tracks, recommend_tracks, create_playlist
+from vibetape_functions import Vibetape
 from senti import Sentiments
 app = Flask(__name__)
 
@@ -15,11 +15,11 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "REDIRECT_URI"
+REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "CLI_ID"
-CLI_SEC = 'CLI_SEC'
+CLI_ID = "024101f673b84950835f8a32a6c53a9f"
+CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
@@ -60,25 +60,24 @@ def home():
 def index():
     global reqs
     if is_logged_in == True:
+        vibetape = Vibetape()
         reqs = True
         sp = spotipy.Spotify(auth=session['toke'])
         user_all_data = sp.current_user()
         user_id = user_all_data["display_name"]
-        top_artists = following(sp)
+        top_artists = vibetape.following(sp)
         followers = user_all_data["followers"]["total"]
         friends = followers + top_artists
-        num_playlists = get_playlists(sp)
+        num_playlists = vibetape.get_playlists(sp)
         top_tracks = sp.current_user_saved_tracks()
         num_tracks = int(top_tracks['total'])
         top_albums = sp.current_user_saved_albums()
         num_albums = top_albums['total']
-        recs=display_recommendation_songs()
-        rec_size = len(recs)
         if  not user_all_data["images"]:
             user_image = ""
         else:
             user_image = user_all_data["images"][0]["url"]
-        return render_template("index.html", user_image=user_image, user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums, recs=recs)
+        return render_template("index.html", user_image=user_image, user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums)
     else:
         return redirect("/")
 
@@ -104,6 +103,8 @@ def api_callback():
     res_body = res.json()
     print(res.json())
     session["toke"] = res_body.get("access_token")
+    if session["toke"] == None:
+        return redirect("/")
     is_logged_in = True # Logged in variable globally updated to allow user to acces the rest of the
     return redirect("index")
 
@@ -111,7 +112,9 @@ def api_callback():
 # User must be logged in, else redirected back to the home route
 @app.route("/data", methods=['GET', 'POST'])
 def user_data():
+    
     if is_logged_in == True:
+        vibetape = Vibetape()
         if request.method == 'POST':
             time = request.form['time']
             limit = request.form['limit']
@@ -119,10 +122,10 @@ def user_data():
             time = 'Short Term'
             limit= 10
         sp = spotipy.Spotify(auth=session['toke'])
-        artists = followed_artists(sp,time, limit)
-        songs = most_played_songs(sp, time, limit)
+        artists = vibetape.followed_artists(sp,time, limit)
+        songs = vibetape.most_played_songs(sp, time, limit)
         size = len(artists)
-        genres = get_one_genre()
+        genres = vibetape.get_one_genre()
         default = time
         return render_template("data.html", top_artists=artists, songs=songs, genres=genres, default=default)
     else:
@@ -153,6 +156,7 @@ def go():
 @app.route("/check")
 def check():
     if is_logged_in == True:
+        vibetape = Vibetape()
         global selected_songs
         global recs
         sp = spotipy.Spotify(auth=session['toke'])
@@ -162,12 +166,12 @@ def check():
         prob = t.prob
         print(mood)
         print(prob)
-        type_of_playlist(mood,prob)
-        top_artists = aggregate_top_artists(sp)
-        top_tracks = aggregate_top_tracks(sp, top_artists)
-        selected_genre = get_one_genre()
-        selected_songs = recommend_tracks(sp, top_artists, limit, top_tracks, selected_genre)
-        recs = display_recommendation_songs()
+        vibetape.type_of_playlist(mood,prob)
+        top_artists = vibetape.aggregate_top_artists(sp)
+        top_tracks = vibetape.aggregate_top_tracks(sp, top_artists)
+        selected_genre = vibetape.get_one_genre()
+        selected_songs = vibetape.recommend_tracks(sp, top_artists, limit, top_tracks, selected_genre)
+        recs = vibetape.display_recommendation_songs()
         return redirect("/songs")
     else:
         return redirect("/")
@@ -186,9 +190,10 @@ def finish():
         global reqs
         global playlist
         global playlist_cover
+        vibetape = Vibetape()
         sp = spotipy.Spotify(auth=session['toke'])
-        playlist = create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
-        playlist_cover = retrieve_playlist_cover(sp)
+        playlist = vibetape.create_playlist(sp, selected_songs, limit, playlist_title, playlist_description)
+        playlist_cover = vibetape.retrieve_playlist_cover(sp)
         return redirect('/done')
     else:
         return redirect("/")
