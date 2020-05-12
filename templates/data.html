@@ -7,21 +7,46 @@
     <title>Vibetape</title>
 
     <!-- Font Icon -->
-    <link rel="stylesheet" href="static/fonts/material-icon/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" href="static/vendor/nouislider/nouislider.min.css">
-
-
-    <!-- Main css -->
-    <link rel="stylesheet" href="static/css/odometer.css" />
-    <link rel="stylesheet" href="static/css/style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-    <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
-    <style>
-
-    </style>
+     <!-- Font Icon -->
+     <link rel="stylesheet" href="static/fonts/material-icon/css/material-design-iconic-font.min.css">
+     <link rel="stylesheet" href="static/vendor/nouislider/nouislider.min.css">
+     
+ 
+     <!-- Main css -->
+     <link rel="stylesheet" href="static/css/odometer.css" />
+     
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+     <style>
+         h5 {display:inline;}
+         h7 {display:inline;}
+     </style>
+     <style>
+    .image-cropper {
+     width: 175;
+     height: 175;
+     position: relative;
+     overflow: hidden;
+     border-radius: 50%;
+ }
+     .profile-pic {
+   display: inline;
+   margin: 0 auto;
+  
+ 
+ }
+ .body{
+     background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+ }
+ .footer{
+     background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+ }
+ 
+ 
+ 
+     </style>
 </head>
-<nav class="navbar navbar-expand-lg navbar-light bg-white">
+<nav class="navbar navbar-expand-lg navbar-light bg-transparent">
   <a class="navbar-brand" href="index">Vibetape</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -34,10 +59,8 @@
       </div>
     </div>
   </nav>
-<body>
+<body class="body">
     <div class="main">
-
-
         <div class="container">
           <h1>Your Most Played</h1>
         <form method="POST">
@@ -65,22 +88,23 @@
                 }
             </script>
             </select>
-            <div class="form-submit">
-                <input type="submit" value="Submit"  id="submit" name="submit" />
-            </div>
           </div>
+            <p class="form-submit">
+              <button type="submit" class="btn btn-dark" value="Submit" id="submit" name="submit">Submit</button>
+            </p>
+         
         
         </form>
            <div class="table-responsive"></div>
-            <table class="table table-striped">
-                <thead class="thead-dark">
+            <table class="table table-bordered table-dark">
+             
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Artists</th>
                     <th scope="col">Songs</th>
                     <th scope="col">Genres</th>
                   </tr>
-                </thead>
+
                 <tbody>
 
                 <tr>

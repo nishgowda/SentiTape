@@ -13,9 +13,8 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="static/css/odometer.css" />
-    <link rel="stylesheet" href="static/css/style.css">
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
     <style>
         h5 {display:inline;}
@@ -23,8 +22,8 @@
     </style>
     <style>
    .image-cropper {
-    width: 150;
-    height: 150;
+    width: 175;
+    height: 175;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
@@ -33,12 +32,22 @@
   display: inline;
   margin: 0 auto;
  
+
 }
+
+.body{
+    background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+}
+.footer{
+    background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
+}
+
+
+
     </style>
 
 </head>
-
-<nav class="navbar navbar-expand-lg navbar-light bg-white">
+<nav class="navbar navbar-expand-lg navbar-light bg-transparent">
     <a class="navbar-brand" href="#">
       </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,25 +61,16 @@
       </div>
     </div>
   </nav>
-<body>
-   
-
+<body class="body">
     <div class="main">
-
-       
         <div class="container">
-            
-            <div class="signup-content">
-               
-
                     <center>
-                       
                         <h1>Welcome {{user_id}}  </h1>
                         <hr>
-                        <div class="image-cropper">
+                        <p class="image-cropper">
                         <img src="{{user_image}}" alt="" class="profile-pic">
-                        </div>
-                     
+                        </p>
+                        <div class="p-3 mb-2 bg-dark text-white">
                         <script src="static/js/odometer.js"></script>
                         <div>
                         <h5 class="playlist-odometer">0</h5>
@@ -88,6 +88,7 @@
                         <h7 class="artists-odometer">0</h7>
                         <h7> Artists Followed</h7>
                     </div>
+                </div>
                       <script>
                         const playlistOdometer = document.querySelector(".playlist-odometer");
                         const odometer = new Odometer({
@@ -131,83 +132,95 @@
               })
               artistOdometer.innerHTML = {{top_artists}};
             </script>
-                    <form method="POST" class="register-form" id="register-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <div class="form-input">
-                                    <label for="limit"class="required">Number of Songs</label>
-                                    <input type="number" min="1" max="100"name="limit" id="limit" required />
+
+                    <form method="POST">
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <label for="limit" span class="input-group-text" id="inputGroup-sizing-default">Number of Songs</span>
                                 </div>
-                                <div class="form-input">
-                                    <label for="playlist_title" class="required" >Playlist Title</label>
-                                    <input type="text" name="playlist_title" id="playlist_title" required/>
-                                </div>
-                            
-                            </div>
-                            <div class="form-group">
-                              <div class="form-radio">
-                                    <div class="label-flex">
-                                        <label for="Type of Playlist" class="required">What's your vibe right now?</label>
+                                <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" min="1" max="100"name="limit" id="limit" required>
+                              </div>
+                        
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">Playlist Title and Description</span>
                                     </div>
-                                    <div class="form-radio-group" >
-                                        <div class="form-radio-item" >
-                                            <input type="radio" name="choice"id="Pumped" value="Pumped" required>
-                                            <label for="Pumped">Pumped</label>
-                                            <span class="check"></span>
-                                        </div>
-                                        <div class="form-radio-item">
-                                            <input type="radio" name="choice" id="Happy" value="Happy">
-                                            <label for="Happy">Happy</label>
-                                            <span class="check"></span>
-                                        </div>
-                                        <div class="form-radio-item">
-                                            <input type="radio" name="choice" id="Chill" value="Chill">
-                                            <label for="Chill">Chill</label>
-                                            <span class="check"></span>
-                                        </div>
-                                        <div class="form-radio-item">
-                                            <input type="radio" name="choice" id="Mellow" value="Mellow">
-                                            <label for="Mellow">Mellow</label>
-                                            <span class="check"></span>
-                                        </div>
-                                        <div class="form-radio-item">
-                                            <input type="radio" name="choice" id="Productive" value="Productive">
-                                            <label for="Productive">Productive</label>
-                                            <span class="check"></span>
-                                        </div>
-                    
-                                    </div>
+                                    <input type="text" aria-label="First name" class="form-control" name="playlist_title" id="playlist_title" required>
+                                    <input type="text" aria-label="Last name" class="form-control" name="playlist_description" id="playlist_description" required>
                                   </div>
-
-                                <div class="form-select">
-                                    <div class="form-input">
-                                        <label for="playlist_description" class="required" required>Playlist Description</label>
-                                        <input type="text" name="playlist_description" id="playlist_description" required/>
-                                    </div>
-            
-                                 
-                                </div>
-
-                                    </div>
-
-                        </div>
-                        <div class="form-submit">
-                            <input type="submit" value="Submit" class="submit" id="submit" name="submit" />
-                        </div>
-                    </form>
-
-                   
-                </center>
+                            
                 
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <label for="choice" span class="input-group-text" id="inputGroup-sizing-default">What is your vibe?</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="choice" id="choice" required>
+                              </div>
+
+                                    </div>
+                    <div class="input-group mb-3">
+                     <div class="input-group-prepend">
+                        <div class="form-submit">
+                            <button type="submit" class="btn btn-dark" value="Submit" id="submit" name="submit">Submit</button>
+                       
+                        </div>
+                     </div>
+                    </div>
+    </div>
+  
+
+
+                    </form>
+               
+
+                
+            
                 </div>
                 
             </div>
         </div>
 
-    </div>
+ 
+</div>  </div>
+</div>
+</body>
 
     <!-- Footer -->
-   
+    <footer class="page-footer font-small special-color-dark pt-4">
+        <!-- Footer Elements -->
+        <div class="container">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+              {% for covers in playlist_covers %}
+                    <div class="carousel-item {% if loop.index == 1 %} active {% endif %}" id="slide{{ loop.index }}">
+                      <img src="{{covers}}" width=200 height=200> 
+                    </div>
+            {% endfor %} 
+           </div>
+            <a class="carousel-control-prev" href="#pageCarousel" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon bg-primary" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#pageCarousel" role="button" data-slide="next">
+              <span class="carousel-control-next-icon bg-primary" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+    
+        </div>
+                  
+                  </div>
+            </div>
+        
+        
+    </footer>
+    <script src="js/bootstrap.min.js"></script>
+   		<script>
+			window.onload = function() { document.body.classList.remove('is-preload'); }
+			window.ontouchmove = function() { return false; }
+			window.onorientationchange = function() { document.body.scrollTop = 0; }
+		</script>
 
     <!-- JS -->
     <script src="static/js/odometer.js"></script>
