@@ -15,11 +15,11 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "red_uri"
+REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "cli_id"
-CLI_SEC = 'cli_sec'
+CLI_ID = "024101f673b84950835f8a32a6c53a9f"
+CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
@@ -37,6 +37,7 @@ recs = []
 playlist = []
 playlist_cover = []
 vibetape = Vibetape()
+sess = []
 # authorization-code-flow Step 1. Have your application request authorization;
 # the user logs in and authorizes access
 @app.route("/verify")
@@ -65,6 +66,9 @@ def newHome():
 def index():
     global reqs
     if is_logged_in == True:
+        global sess
+        if sess == None:
+            return redirect("/")
         reqs = True
         sp = spotipy.Spotify(auth=session['toke'])
         user_all_data = sp.current_user()
@@ -88,8 +92,11 @@ def index():
 @app.route("/about")
 def about():
     if is_logged_in == True:
+        global sess
+        if sess == None:
+            return redirect("/")
         sp = spotipy.Spotify(auth=session['toke'])
-       
+
         artist_image = vibetape.retrieve_artist_art(sp)
         track_image = vibetape.retrieve_song_art(sp)
         return render_template("about.html",artist_image=artist_image, track_image=track_image)
@@ -102,6 +109,7 @@ def about():
 @app.route("/api_callback")
 def api_callback():
     global is_logged_in
+    global sess
     session.clear()
     code = request.args.get('code')
 
@@ -117,6 +125,7 @@ def api_callback():
     res_body = res.json()
     print(res.json())
     session["toke"] = res_body.get("access_token")
+    sess = session["toke"]
     if session["toke"] == None:
         return redirect("/")
     is_logged_in = True # Logged in variable globally updated to allow user to acces the rest of the
@@ -128,6 +137,9 @@ def api_callback():
 def user_data():
     
     if is_logged_in == True:
+        global sess
+        if sess == None:
+            return redirect("/")
         if request.method == 'POST':
             time = request.form['time']
             limit = request.form['limit']
@@ -148,8 +160,6 @@ def user_data():
 # authorization-code-flow Step 3.
 # Use the access token to access the Spotify Web API;
 # Spotify returns requested data
-
-
 @app.route("/index", methods=['POST'])
 def go():
     global limit 
@@ -169,6 +179,9 @@ def go():
 @app.route("/check")
 def check():
     if is_logged_in == True:
+        global sess
+        if sess == None:
+            return redirect("/")
         global selected_songs
         global recs
         sp = spotipy.Spotify(auth=session['toke'])
@@ -191,6 +204,9 @@ def check():
 @app.route("/songs")
 def songs():
     if is_logged_in == True:
+        global sess
+        if sess == None:
+            return redirect("/")
         global recs
         return render_template('check.html', recs=recs)
     else:
@@ -199,6 +215,9 @@ def songs():
 @app.route("/songs", methods=['POST'])
 def finish():
     if is_logged_in == True:
+        global sess
+        if sess == None:
+            return redirect("/")
         global reqs
         global playlist
         global playlist_cover
@@ -213,6 +232,9 @@ def finish():
 @app.route("/done")
 def done():
     if is_logged_in == True:
+        global sess
+        if sess == None:
+            return redirect("/")
         global vibetape
         vibetape.reset()
         return render_template('playlist.html', playlist=playlist, playlist_cover=playlist_cover)
