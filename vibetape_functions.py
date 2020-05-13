@@ -274,7 +274,7 @@ class Vibetape():
         user_id = user_all_data["id"]
         playlist_ids = []
         playlist_covers = []
-        playlists = sp.current_user_playlists()
+        playlists = sp.current_user_playlists(limit=1)
         playlist_urls = []
         print((playlists["total"]))
 
@@ -292,3 +292,25 @@ class Vibetape():
             playlist_urls.append(image_url)
        
         return playlist_urls
+    def retrieve_artist_art(self, sp):
+        artist_image = []
+        ranges = ['short_term', 'medium_term', 'long_term']
+        for r in ranges:
+            top_artists_all_data = sp.current_user_top_artists(limit=10, time_range=r)
+            top_artists_data = top_artists_all_data['items']
+            for artist_data in top_artists_data:
+                if (artist_data["images"] not in artist_image):
+                    artist_image.append(artist_data["images"][0]["url"])
+        print(artist_image[0:1])
+        return artist_image[0:1]
+    def retrieve_song_art(self, sp):
+        track_image = []
+        ranges = ['short_term', 'medium_term', 'long_term']
+        for r in ranges:
+            top_tracks_all_data = sp.current_user_top_tracks(limit=10, time_range=r)
+            top_tracks_data = top_tracks_all_data['items']
+            for track_data in top_tracks_data:
+                if (track_data["album"]["images"] not in track_image):
+                    track_image.append(track_data["album"]["images"][0]["url"])
+        print(track_image[0:2])
+        return track_image[0:1]

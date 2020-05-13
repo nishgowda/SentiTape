@@ -15,11 +15,11 @@ app.secret_key = str(os.urandom(24))
 API_BASE = 'https://accounts.spotify.com'
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "red_uri"
+REDIRECT_URI = "http://127.0.0.1:5000/api_callback"
 
 SCOPE = 'user-library-read user-top-read playlist-modify-public user-follow-read'
-CLI_ID = "cli_id"
-CLI_SEC = 'cli_sec'
+CLI_ID = "024101f673b84950835f8a32a6c53a9f"
+CLI_SEC = 'e0cf46dc805c48e9ad75e85ebc6c3919'
 
 # Set this to True for testing but you probably want it set to False in production.
 SHOW_DIALOG = True
@@ -77,15 +77,24 @@ def index():
         num_tracks = int(top_tracks['total'])
         top_albums = sp.current_user_saved_albums()
         num_albums = top_albums['total']
-        playlist_covers = vibetape.retrieve_all_playlists_cover(sp)
         if  not user_all_data["images"]:
             user_image = ""
         else:
             user_image = user_all_data["images"][0]["url"]
-        return render_template("index.html", user_image=user_image, user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums, playlist_covers=playlist_covers)
+        return render_template("index.html", user_image=user_image, user_id=user_id, top_artists=top_artists, followers=followers, friends=friends, num_playlists=num_playlists, num_tracks=num_tracks, num_albums=num_albums)
     else:
         return redirect("/")
 
+@app.route("/about")
+def about():
+    if is_logged_in == True:
+        sp = spotipy.Spotify(auth=session['toke'])
+       
+        artist_image = vibetape.retrieve_artist_art(sp)
+        track_image = vibetape.retrieve_song_art(sp)
+        return render_template("about.html",artist_image=artist_image, track_image=track_image)
+    else:
+        return redirect("/")
 
 # authorization-code-flow Step 2.
 # Have your application request refresh and access tokens;
