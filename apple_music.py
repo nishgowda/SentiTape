@@ -2,10 +2,7 @@ import applemusicpy
 import requests
 
 secret_key = """-----BEGIN PRIVATE KEY-----
-MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg1iZw51WbyOV2D9Vz
-Wcw1uLr1qEOFK8mE8opWq0Fnc+ugCgYIKoZIzj0DAQehRANCAAQcIEPAAs+y6nRB
-BvfPHc4Ws27OCq3upHokX7Qt0vvK/OoDDF5a0k3k0RSZ/7iXZI3WYeTaaiaPHCvF
-Fz6FMJ3w
+
 -----END PRIVATE KEY-----"""
 key_id = '9XSZP7A749'
 team_id = 'GCBWVTCRDA'
@@ -18,7 +15,7 @@ for item in results['results']['albums']['data']:
 
 
 
-#username = 'nish.gowda6@gmail.com'
+#username = 
 #endpoint_url = "https://api.music.apple.com/v1/{username}/library/playlists"
 
 top_charts = am.charts(types=['songs'],limit=20)
