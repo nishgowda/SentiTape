@@ -4,8 +4,8 @@ import requests
 secret_key = """-----BEGIN PRIVATE KEY-----
 
 -----END PRIVATE KEY-----"""
-key_id = '9XSZP7A749'
-team_id = 'GCBWVTCRDA'
+key_id = ''
+team_id = ''
 
 am = applemusicpy.AppleMusic(secret_key, key_id, team_id)
 results = am.search('travis scott', types=['albums'], limit=5)
