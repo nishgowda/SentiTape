@@ -1,4 +1,4 @@
-# Vibetape
+# SentiTape
 
 ### What is it?
 
